@@ -23,7 +23,8 @@ export async function login(email: string, password: string) {
   // For demo purposes, we'll accept a specific email/password
   if (email === "owner@example.com" && password === "password") {
     // Set a cookie to maintain the session
-    cookies().set("auth-token", "owner-session-token", {
+    const cookieStore = await cookies();
+    cookieStore.set("auth-token", "owner-session-token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week
@@ -36,11 +37,13 @@ export async function login(email: string, password: string) {
 }
 
 export async function logout() {
-  cookies().delete("auth-token");
+  const cookieStore = await cookies();
+  cookieStore.delete("auth-token");
 }
 
 export async function getUser(): Promise<User | null> {
-  const token = cookies().get("auth-token");
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth-token");
 
   // In a real app, you would verify the token and fetch the user
   // For demo purposes, we'll return the mock owner if the token exists
