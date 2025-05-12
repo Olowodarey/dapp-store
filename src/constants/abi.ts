@@ -1,4 +1,4 @@
-export const TODO_ABI = [
+export const STORE_ABI = [
   {
     type: "impl",
     name: "store",
@@ -210,4 +210,4 @@ export const TODO_ABI = [
     kind: "enum",
     variants: [],
   },
-];
+] as const;

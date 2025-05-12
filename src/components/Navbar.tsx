@@ -35,13 +35,20 @@ const Navbar = () => {
             </Button>
           </Link>
 
+          <Link href="/product">
+            <Button variant="ghost" size="sm">
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              Products
+            </Button>
+          </Link>
+
           <div className="flex justify-center items-center">
             {isConnected && account ? (
               <Account />
             ) : (
               <button
                 onClick={() => setIsOpen(true)}
-                className="px-4 md:px-4 py-1 text-base md:text-lg font-bold bg-gradient-to-r from-[#FC8181] to-[#5C94FF] rounded-full hover:opacity-90 transition-all duration-200"
+                className="px-4 md:px-4 py-1 text-base md:text-lg font-bold bg-blue-600 rounded-full hover:opacity-90 transition-all duration-200"
               >
                 Connect Wallet
               </button>

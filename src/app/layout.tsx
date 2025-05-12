@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/app/_provider/theme-provider";
 import { CartProvider } from "@/components/cart-provider";
 import { StarknetProvider } from "@/app/_provider/starknet-provider";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +29,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <CartProvider>{children}</CartProvider>
+            <CartProvider>
+              <Navbar />
+              {children}
+            </CartProvider>
           </ThemeProvider>
         </StarknetProvider>
       </body>

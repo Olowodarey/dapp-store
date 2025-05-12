@@ -17,11 +17,28 @@ import {
 } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useContract } from "@starknet-react/core";
+import { STORE_ABI } from "@/constants/abi";
+import { STORE_CONTRACT_ADDRESS } from "@/constants";
+import { useSendTransaction } from "@starknet-react/core";
+
+type Item = {
+  productname: string;
+  price: number;
+  quantity: number;
+  // imageUrl?: string;
+};
 
 export default function NewProductPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const { sendAsync } = useSendTransaction({ calls: [] });
+
+  const { contract } = useContract({
+    abi: STORE_ABI,
+    address: STORE_CONTRACT_ADDRESS,
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -64,27 +81,33 @@ export default function NewProductPage() {
         throw new Error("Quantity must be a non-negative number");
       }
 
-      // Submit the form
-      const response = await fetch("/api/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          price,
-          quantity,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Failed to add product");
+      // Prepare data for Starknet contract
+      if (!contract) {
+        throw new Error("Contract not initialized");
       }
 
-      // Redirect to products page on success
-      router.push("/dashboard/products");
-      router.refresh();
+      try {
+        // Create the transaction call
+        const call = contract.populate("add_item", [
+          formData.name,  // productname
+          price, // price as number
+          quantity // quantity as number
+        ]);
+
+        // Send the transaction
+        const response = await sendAsync([call]);
+
+        console.log("Transaction submitted:", response);
+        
+        // Wait for transaction confirmation
+        // Note: In a production app, you might want to implement a more robust transaction tracking system
+        
+        // Redirect to products page on success
+        router.push("/product");
+      } catch (txError) {
+        console.error("Transaction error:", txError);
+        throw new Error("Failed to add product to blockchain");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {

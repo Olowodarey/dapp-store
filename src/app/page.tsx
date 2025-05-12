@@ -6,10 +6,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { useConnect, useContract, useReadContract } from "@starknet-react/core";
-import { TODO_ABI } from "@/constants/abi";
+import { STORE_ABI } from "@/constants/abi";
 import { STORE_CONTRACT_ADDRESS } from "@/constants";
 import { shortString } from "starknet";
-import ProductCard, { Product } from "@/components/ProductCard";
+import ProductCard, { Product } from "@/components/product/ProductCard";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -18,7 +18,7 @@ export default function Home() {
 
   // Connect to the contract
   const { contract } = useContract({
-    abi: TODO_ABI as any,
+    abi: STORE_ABI as any,
     address: STORE_CONTRACT_ADDRESS,
   });
 
@@ -58,7 +58,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
       <main className="flex-1 w-full">
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
           <div className="container mx-auto px-4 md:px-6">
@@ -73,7 +72,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Link href="/shop">
+                <Link href="/product">
                   <Button size="lg">
                     <ShoppingBag className="mr-2 h-4 w-4" />
                     Browse Products

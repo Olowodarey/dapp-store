@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { ShoppingCart, Eye } from "lucide-react";
 import Link from "next/link";
 
@@ -19,7 +19,7 @@ interface ProductCardProps {
 const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   // Convert felt252 productname to readable string
   const productName = product.productname.toString();
-  
+
   return (
     <div className="group relative overflow-hidden rounded-lg border bg-background shadow-md transition-all hover:shadow-lg">
       <div className="aspect-square overflow-hidden bg-muted">
@@ -39,7 +39,10 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           </p>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <Link href={`/product/${encodeURIComponent(product.productname)}`} passHref>
+          <Link
+            href={`/product/${encodeURIComponent(product.productname)}`}
+            passHref
+          >
             <Button variant="outline" className="w-full">
               <Eye className="mr-2 h-4 w-4" />
               See Details
